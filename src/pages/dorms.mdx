@@ -1,0 +1,52 @@
+---
+category: Student Life
+categoryOrder: 2
+order: 2
+
+title: Dorms
+description: A helpful spreadsheet maintained by current students on first year dorms
+layout: ../layouts/Layout.astro
+
+---
+
+import DormGrid from "../components/DormGrid.svelte";
+import { dorms } from "../data/dorms";
+
+<script is:inline set:html={`
+    window.__dorms__ = ${JSON.stringify(dorms).replace(/</g, '\\u003c')};
+    window.dispatchEvent(new CustomEvent("dorms-ready"));
+`} />
+
+
+## Preface
+The following data has been produced and maintained by current students. This rendention is based off of this
+[spreadsheet](https://docs.google.com/spreadsheets/d/1FkCaGv6nZAVP808w4iK7Awe5jEgMs-mg4xdmH-6jsr8/edit?usp=sharing).
+
+All dorms come with laundry facilities. Prices are per year. Measurements in feet.
+Unlabeled prices are for traditional doubles. For more official information visit
+[the housing website](https://www.cmu.edu/housing/our-communities/first-year/index.html).
+
+Capacity means total # of beds-- some may be taken up by upperclassmen if the note says "upperclassmen live here too". Default is that it's freshmen only.
+[HOUSING PRICES AND CAPACITIES, 2026/2027](https://www.cmu.edu/housing/forms/26-27-housing-rates-non-staff.pdf)
+
+Colors are used for Carnegie Cup during O-Week; not too important
+All communal bathrooms are staff-cleaned.
+
+## Dorms:
+
+<nav class="mb-6 text-zinc-700 dark:text-zinc-300">
+First Year Housing offered:
+  {dorms.map((d, i) => (
+    <>
+      <a href={`#${d.name.replace(/\s+/g, "-")}`} class="hover:underline">
+        {d.name}
+      </a>
+      {i < dorms.length - 1 ? ", " : ""}
+    </>
+  ))}
+</nav>
+
+
+<DormGrid dorms={dorms} />
+
+Questions? Or are you a current student that has something to add? Reach out through discord @gostmeaper or email johncao@andrew.cmu.edu
