@@ -24,7 +24,18 @@ if (currentPath !== "/" && currentPath.endsWith("/")) {
 	currentPath = currentPath.slice(0, -1);
 }
 
-const publicBaseUrl = Astro.site ? new URL(Astro.site) : new URL(Astro.url.origin);
+const deploymentUrl = [
+	import.meta.env.PUBLIC_SITE_URL,
+	import.meta.env.VERCEL_URL,
+	import.meta.env.VERCEL_PROJECT_PRODUCTION_URL,
+	import.meta.env.URL,
+].find((url): url is string => typeof url === "string" && url.trim().length > 0);
+
+const publicBaseUrl = deploymentUrl
+	? new URL(deploymentUrl.startsWith("http") ? deploymentUrl : `https://${deploymentUrl}`)
+	: Astro.site
+		? new URL(Astro.site)
+		: new URL(Astro.url.origin);
 publicBaseUrl.pathname = "/";
 publicBaseUrl.search = "";
 publicBaseUrl.hash = "";
